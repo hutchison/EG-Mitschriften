@@ -105,7 +105,8 @@ fleqn,            % Ausgabe von Gleichungen linksbündig
 
 %% Packages für Grafiken & Abbildungen
 \usepackage{pgf,tikz}      %%TeX ist kein Zeichenprogramm
-\usetikzlibrary{arrows,calc,through}
+\usetikzlibrary{arrows,calc,through,fit}
+\tikzset{mynode/.style={circle, draw}}
 
 %\usepackage{eso-pic}
 %\AddToShipoutPicture*{
@@ -113,6 +114,9 @@ fleqn,            % Ausgabe von Gleichungen linksbündig
   %\put(\LenToUnit{0mm},\LenToUnit{137mm}){\rule{\LenToUnit{20pt}}{\LenToUnit{0.5pt}}}
   %\put(\LenToUnit{0mm},\LenToUnit{68.5mm}){\rule{\LenToUnit{20pt}}{\LenToUnit{0.5pt}}}
 %}
+
+\newcounter{Beobachtung}
+\newcommand{\bitem}{\refstepcounter{Beobachtung}\item[(\theBeobachtung)]}
 
 \begin{document}
 
@@ -216,12 +220,9 @@ fleqn,            % Ausgabe von Gleichungen linksbündig
     \end{figure}
 \end{description}
 
-\subsection*{Beobachtungen} % (fold)
-\label{sub:Beobachtungen}
-
 In jedem Graphen $G = (V,E)$ gilt:
 \begin{enumerate}
-  \item $\sum\limits_{v \in V} \deg(v) = 2 |E|$\label{summegradknotengleich2e}
+  \bitem $\sum\limits_{v \in V} \deg(v) = 2 |E|$\label{summegradknotengleich2e}
     \begin{proof}
       Man denke an die Inzidenzmatrix $\mathbf{M}$ von $G$. Die Zeilensummen
       sind genau die Grade der Knoten und damit ist $\sum\limits_{v \in V}
@@ -231,10 +232,11 @@ In jedem Graphen $G = (V,E)$ gilt:
       Summe aller Einträge) gleich $2|E|$. Da beide Summen gleich sind, gilt
       $\sum\limits_{v \in V} \deg(v) = 2 |E|$.
     \end{proof}
-  \item Die Anzahl der Knoten mit ungeradem Grad ist gerade. \hfill
-    (Handschlag-Lemma)
+
+  \bitem Die Anzahl der Knoten mit ungeradem Grad ist gerade.
+    \hfill (Handschlag-Lemma)
     \begin{proof}
-      Man betrachte die Gleichung aus \ref{summegradknotengleich2e}. modulo 2.
+      Man betrachte die Gleichung aus (\ref{summegradknotengleich2e}) modulo 2.
       Für den Grad eines Knotens kann nur gelten:
       \begin{align*}
         \deg(v) \equiv
@@ -243,14 +245,12 @@ In jedem Graphen $G = (V,E)$ gilt:
             0 \mod 2, \text{falls $\deg(v)$ gerade}\\
           \end{cases}
       \end{align*}
-      Die rechte Seite aus \ref{summegradknotengleich2e}. ist demnach kongruent
+      Die rechte Seite aus (\ref{summegradknotengleich2e}) ist demnach kongruent
       $0$. Die linke Seite ist die Summe der Knoten ungeraden Grads und kann nur
       kongruent $0$ sein, wenn wir es mit einem ordentlichen Graphen zu tun
       haben.
     \end{proof}
 \end{enumerate}
-
-% subsection Beobachtungen (end)
 
 % section Grundbegriffe (end)
 
@@ -267,10 +267,10 @@ In jedem Graphen $G = (V,E)$ gilt:
 
   \item[Sehne von $H$:] jede Kante $xy \in E \setminus E'$ mit $x,y \in V'$;
     also die Kanten, die im Obergraphen enthalten sind, aber nicht im Teilgraphen
-  \item[$H$ ist induzierter Teilgraph:] $H$ ist sehnenlos\\
+  \item[$\mathbf{H}$ ist induzierter Teilgraph:] $H$ ist sehnenlos\\
     also alle Kanten, die im Obergraphen enthalten sind, sind auch im
     Teilgraphen enthalten
-  \item[$H$ ist aufspannender Teilgraph:] $V' = V$\\
+  \item[$\mathbf{H}$ ist aufspannender Teilgraph:] $V' = V$\\
     also alle Knoten, die im Obergraphen enthalten sind, sind auch im
     Teilgraphen enthalten
 
@@ -339,13 +339,14 @@ In jedem Graphen $G = (V,E)$ gilt:
 
   \item[Weg:] Ein Weg in $G$ ist eine Folge von Knoten $u_0, u_1, \dots, u_l$
     mit $u_i u_{i+1} \in E$ für alle $0 \leq i < l$
-  \item[Pfad:] oder auch einfacher Weg ist ein Weg in dem kein Knoten doppelt
-    vorkommt
+  \item[Pfad:] (oder auch \textit{einfacher} Weg) ist ein Weg in dem kein Knoten
+    doppelt vorkommt
   \item[Zykel:] ein Weg $u_0, u_1, \dots, u_l$ mit $u_0 = u_l$, also ein Weg bei
     dem Anfangs- und Endknoten gleich sind
-  \item[Kreis:] oder auch einfacher Zykel ist ein Zykel mit den Knoten $u_0,
-    u_1, \dots, u_l = u_0$ in dem die Knoten $u_1, \dots, u_l$ verschieden sind.
-    Also alle Knoten, außer Anfangs- und Endknoten, sind verschieden.
+  \item[Kreis:] (oder auch \textit{einfacher} Zykel) ist ein Zykel mit den
+    Knoten $u_0, u_1, \dots, u_l = u_0$ in dem die Knoten $u_1, \dots, u_l$
+    verschieden sind. Also alle Knoten, außer Anfangs- und Endknoten, sind
+    verschieden.
   \item[zusammenhängender Graph:] wenn es zwischen je zwei Knoten einen Weg gibt
   \item[Komponenten:] (Zusammenhangskomponenten) die maximalen zusammenhängenden
     Teilgraphen
@@ -353,15 +354,11 @@ In jedem Graphen $G = (V,E)$ gilt:
     sich die Anzahl der Komponenten erhöht
 \end{description}
 
-\subsection*{Beobachtungen} % (fold)
-\label{sub:Beobachtungen}
-
-\begin{itemize}
-  \item Es sei $G = (V,E)$ ein zusammenhängender Graph und $e$ eine Kante eines
-    Kreises in $G$, dann ist $G-e$ wieder zusammenhängend.
-\end{itemize}
-
-% subsection Beobachtungen (end)
+\begin{enumerate}
+  \bitem \label{GraphminusKnotenwiederzh} Es sei $G = (V,E)$ ein
+    zusammenhängender Graph und $e$ eine Kante eines Kreises in $G$, dann ist
+    $G-e$ wieder zusammenhängend.
+\end{enumerate}
 
 % section Teilgraphen (end)
 
@@ -372,20 +369,23 @@ In jedem Graphen $G = (V,E)$ gilt:
   \item[Baum:] zusammenhängender kreisfreier Graph
   \item[Wald:] kreisfreier Graph; Komponenten sind demnach Bäume
   \item[Blatt:] Knoten vom Grad 1
-  \item[Spannbaum:] ein aufspannender Teilgraph und Baum eines Graphen
+  \item[Spannbaum:] ein Teilgraph eines Graphen, der ein Baum ist und alle
+    Knoten des Graphen enthält (= aufspannend)
 \end{description}
 
-\subsection*{Beobachtungen} % (fold)
-\label{sub:Beobachtungen}
-
 \begin{enumerate}
-  \item Jeder Baum mit mindestens zwei Knoten hat mindestens zwei Blätter.
-  \item Ist $v$ ein Blatt vom Baum $G$, dann ist $G-v$ wieder ein Baum.
-  \item Ein Graph ist genau dann zusammenhängend, wenn er einen Spannbaum
-    enthält.
-\end{enumerate}
+  \bitem Jeder Baum mit mindestens zwei Knoten hat mindestens
+    zwei Blätter.
 
-% subsection Beobachtungen (end)
+    $\rightarrow$ betrachte dazu die längsten Wege.
+  \bitem Ist $v$ ein Blatt vom Baum $G$, dann ist $G-v$ wieder
+    ein Baum.
+  \bitem Ein Graph ist genau dann zusammenhängend, wenn er
+    einen Spannbaum enthält.
+
+    „$\Leftarrow$“ Spannbaum ist zh. \qquad „$\Rightarrow$“ wiederholend
+    (\ref{GraphminusKnotenwiederzh}) anwenden
+\end{enumerate}
 
 \subsection*{Charakterisierungen von Bäumen} % (fold)
 \label{sub:Charakterisierungen von Bäumen}
@@ -406,5 +406,133 @@ Eigenschaften äquivalent:
 % subsection Charakterisierungen von Bäumen (end)
 
 % section Bäume (end)
+
+\newpage
+
+\fancyhead[C]{Notizen zur Übung}
+\fancyhead[R]{12. April 2012}
+
+\subsection*{Übung} % (fold)
+\label{sub:Übung}
+
+Sei $k \geq 1$ eine natürliche Zahl. $G$ heißt $k$-zh., falls $G-X$ zh. bleibt
+für alle Teilmengen $X \subset V$ mit $|X| < k$. Anders ausgedrückt: um den
+Zusammenhang von $G$ zu zerstören, muss man mindestens $k$ Knoten entfernen. Das
+heißt aber nicht, dass man den Zusammenhang automatisch zerstört, wenn man mind.
+$k$ Knoten entfernt! (Beispiel: Dreieck ist 2-zh. Auch wenn man zwei Knoten
+entfernt ist der Graph noch zh.)\medskip
+
+$G$ heißt 2-zh., falls
+\begin{itemize}
+  \item $G$ zh.
+  \item $G - v$ zh. für alle Knoten $v$ (heißt: kein Knoten von $G$ ist
+    Artikulationspunkt)
+\end{itemize}
+
+\begin{figure}[ht]
+  \caption{Beispiele für zh. Graphen}
+  \centering
+  \subfloat[2-zh.]{
+    \begin{tikzpicture}
+      \node (a) at (0,0) [mynode] {};
+      \node (b) at (1,1) [mynode] {};
+      \node (c) at (1,-1) [mynode] {};
+      \node (d) at (3,1) [mynode] {};
+      \node (e) at (4,0) [mynode] {};
+      \node (f) at (4,2) [mynode] {};
+      \node (g) at (5,1) [mynode] {};
+      \path (a) edge (b) edge (c);
+      \path (b) edge (d) edge (c);
+      \path (f) edge (d) edge (g);
+      \path (e) edge (d) edge (g) edge (c);
+    \end{tikzpicture}
+  }
+  \qquad
+  \subfloat[nicht 2-zh.]{
+    \begin{tikzpicture}
+      \node (a) at (0,0) [mynode] {};
+      \node (b) at (1,1) [mynode] {};
+      \node (c) at (1,-1) [mynode] {};
+      \node (d) at (3,1) [mynode] {};
+      \node (e) at (4,0) [mynode] {};
+      \node (f) at (4,2) [mynode] {};
+      \node (g) at (5,1) [mynode] {};
+      \path (a) edge (b) edge (c);
+      \path (b) edge (d) edge (c);
+      \path (f) edge (d) edge (g);
+      \path (e) edge (d) edge (g);
+    \end{tikzpicture}
+  }
+\end{figure}
+
+\subsubsection*{zweiter Teil von Aufgabe 1 (Übung 1)} % (fold)
+\label{ssub:zweiter Teil von Aufgabe 1 (Übung 1)}
+\begin{itemize}
+  \item je zwei verschiedene Blöcke haben höchstens einen gemeinsamen Knoten
+  \item $B \cap B' = \left\{ v \right\} \Rightarrow v$ ist Trennknoten von $G$
+\end{itemize}
+
+\begin{figure}[ht]
+  \caption{Beispielgraph}
+  \centering
+  \subfloat[$G$]{
+    \begin{tikzpicture}
+      [every fit/.style={draw}]
+      \node (1) at (0,1) [mynode] {1};
+      \node (2) at (0,-1) [mynode] {2};
+      \node (3) at (1,0) [mynode] {3};
+      \node (4) at (3,0) [mynode] {4};
+      \node (5) at (2,-1) [mynode] {5};
+      \node (6) at (2.5,-2) [mynode] {6};
+      \node (7) at (4,-2) [mynode] {7};
+      \node (8) at (4,-1) [mynode] {8};
+      \node (9) at (5,0) [mynode] {9};
+      \node (10) at (4,1) [mynode] {10};
+      \node (11) at (3,2) [mynode] {11};
+      \node (12) at (5,2) [mynode] {12};
+      \node (13) at (4,3) [mynode] {13};
+      \path (3) edge (1) edge (2) edge (4);
+      \path (1) edge (2);
+      \path (5) edge (4) edge (6);
+      \path (6) edge (7);
+      \path (4) edge (8) edge (9) edge (10) edge (6);
+      \path (9) edge (10) edge (8);
+      \path (10) edge (11) edge (12);
+      \path (13) edge (11) edge (12);
+      \node [fit=(1) (2) (3), label=above:$B_1$] {};
+      \node [fit=(3) (4), label=above:$B_2$] {};
+      \node [fit=(4) (5) (6), label=below left:$B_3$] {};
+      \node [fit=(6) (7), label=right:$B_4$] {};
+      \node [fit=(4) (8) (9) (10), label=right:$B_5$] {};
+      \node [fit=(10) (11) (12) (13), label=right:$B_6$] {};
+    \end{tikzpicture}
+  }
+  \qquad
+  \subfloat[$G'$]{
+    \begin{tikzpicture}
+      [vertex/.style={draw, circle}]
+      \node [vertex] (root) {4}
+        child {node [vertex] {$B_2$}
+          child {node [vertex] {3}
+            child {node [vertex] {$B_1$}}
+          }
+        }
+        child {node [vertex] {$B_3$}
+          child {node [vertex] {6}
+           child {node [vertex] {$B_4$}}
+          }
+        }
+        child {node [vertex] {$B_5$}
+          child {node [vertex] {10}
+            child {node [vertex] {$B_6$}}
+          }
+        };
+    \end{tikzpicture}
+  }
+\end{figure}
+
+% subsubsection zweiter Teil von Aufgabe 1 (Übung 1) (end)
+
+% subsection Übung (end)
 
 \end{document}
